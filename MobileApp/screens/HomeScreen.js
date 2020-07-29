@@ -22,6 +22,11 @@ export default function HomeScreen() {
     setReceiveMessages((prevState) => GiftedChat.append(prevState, messages));
   };
 
+  const joinChat = (username) => {
+    socket.current.emit("join", username);
+    setHasJoined(true);
+  };
+
   return (
     <View style={{ flex: 1 }}>
       {hasJoined ? (
@@ -33,7 +38,7 @@ export default function HomeScreen() {
           }}
         />
       ) : (
-        <JoinScreen />
+        <JoinScreen joinChat={joinChat}/>
       )}
       {Platform.OS === "android" && <KeyboardAvoidingView behavior="padding" />}
     </View>

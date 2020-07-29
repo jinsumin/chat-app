@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   TextInput,
@@ -6,9 +6,12 @@ import {
   Button,
   KeyboardAvoidingView,
   Platform,
+  ImagePropTypes,
 } from "react-native";
 
-export default function JoinScreen() {
+export default function JoinScreen({joinChat}) {
+  const [username, setUsername] = useState("");
+
   return (
     <View
       style={{
@@ -27,6 +30,8 @@ export default function JoinScreen() {
         source={require("../assets/grouping-logo.png")}
       />
       <TextInput
+        onChangeText={text => setUsername(text)}
+        value={username}
         style={{
           fontSize: 40,
           color: "white",
@@ -34,7 +39,7 @@ export default function JoinScreen() {
         }}
         placeholder="Enter username"
       />
-      <Button title="Join Chat" fontSize="50" />
+      <Button title="Join Chat" fontSize="50" onPress={() => joinChat(username)}/>
       {Platform.OS === "ios" && <KeyboardAvoidingView behavior="padding" />}
     </View>
   );
