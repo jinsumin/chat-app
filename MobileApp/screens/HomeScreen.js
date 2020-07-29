@@ -5,19 +5,28 @@ import io from "socket.io-client";
 
 export default function HomeScreen() {
   const [messageToSend, setMessageToSend] = useState("");
+  const [receiveMessages, setReceiveMessages] = useState([]);
   const socket = useRef(null);
-  
+
   useEffect(() => {
     socket.current = io("http://192.168.10.194:3002");
+    socket.current.on("message", (message) => {
+      setReceiveMessages((prevState) => [...prevState, message]);
+    });
   }, []);
 
   const sendMessage = () => {
     socket.current.emit("message", messageToSend);
-  }
+    setMessageToSend("");
+  };
+
+  const textOfReceiveMessages = receiveMessages.map((msg) => (
+    <Text key={msg}>{msg}</Text>
+  ));
 
   return (
     <View style={styles.container}>
-      <Text>Hello React Native!</Text>
+      {textOfReceiveMessages}
       <TextInput
         value={messageToSend}
         onChangeText={(text) => setMessageToSend(text)}
