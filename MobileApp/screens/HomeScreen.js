@@ -1,6 +1,13 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useState, useRef } from "react";
-import { StyleSheet, Text, View, TextInput } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  Platform,
+  KeyboardAvoidingView,
+} from "react-native";
 import io from "socket.io-client";
 import { GiftedChat } from "react-native-gifted-chat";
 
@@ -34,13 +41,16 @@ export default function HomeScreen() {
   };
 
   return (
-    <GiftedChat
-      messages={receiveMessages}
-      // onSend={messages => this.onSend(messages)}
-      user={{
-        _id: 1,
-      }}
-    />
+    <View style={{ flex: 1 }}>
+      <GiftedChat
+        messages={receiveMessages}
+        // onSend={messages => this.onSend(messages)}
+        user={{
+          _id: 1,
+        }}
+      />
+      {Platform.OS === "android" && <KeyboardAvoidingView behavior="padding" />}
+    </View>
   );
 }
 
