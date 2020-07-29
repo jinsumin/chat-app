@@ -1,14 +1,12 @@
 import React, { useEffect, useState, useRef } from "react";
-import {
-  View,
-  Platform,
-  KeyboardAvoidingView,
-} from "react-native";
+import { View, Platform, KeyboardAvoidingView } from "react-native";
 import io from "socket.io-client";
 import { GiftedChat } from "react-native-gifted-chat";
+import JoinScreen from "./JoinScreen";
 
 export default function HomeScreen() {
   const [receiveMessages, setReceiveMessages] = useState([]);
+  const [hasJoined, setHasJoined] = useState(false);
   const socket = useRef(null);
 
   useEffect(() => {
@@ -21,18 +19,22 @@ export default function HomeScreen() {
   const onSend = (messages) => {
     console.log(messages);
     socket.current.emit("message", messages[0].text);
-    setReceiveMessages(prevState => GiftedChat.append(prevState, messages));
+    setReceiveMessages((prevState) => GiftedChat.append(prevState, messages));
   };
 
   return (
     <View style={{ flex: 1 }}>
-      <GiftedChat
-        messages={receiveMessages}
-        onSend={(messages) => onSend(messages)}
-        user={{
-          _id: 1
-        }}
-      />
+      {hasJoined ? (
+        <GiftedChat
+          messages={receiveMessages}
+          onSend={(messages) => onSend(messages)}
+          user={{
+            _id: 1,
+          }}
+        />
+      ) : (
+        <JoinScreen />
+      )}
       {Platform.OS === "android" && <KeyboardAvoidingView behavior="padding" />}
     </View>
   );
