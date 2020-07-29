@@ -2,6 +2,7 @@ import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useState, useRef } from "react";
 import { StyleSheet, Text, View, TextInput } from "react-native";
 import io from "socket.io-client";
+import { GiftedChat } from "react-native-gifted-chat";
 
 export default function HomeScreen() {
   const [messageToSend, setMessageToSend] = useState("");
@@ -13,6 +14,18 @@ export default function HomeScreen() {
     socket.current.on("message", (message) => {
       setReceiveMessages((prevState) => [...prevState, message]);
     });
+    setReceiveMessages([
+      {
+        _id: 1,
+        text: "Hello developer",
+        createdAt: new Date(),
+        user: {
+          _id: 2,
+          name: "React Native",
+          avatar: "https://placeimg.com/140/140/any",
+        },
+      },
+    ]);
   }, []);
 
   const sendMessage = () => {
@@ -20,20 +33,14 @@ export default function HomeScreen() {
     setMessageToSend("");
   };
 
-  const textOfReceiveMessages = receiveMessages.map((msg) => (
-    <Text key={msg}>{msg}</Text>
-  ));
-
   return (
-    <View style={styles.container}>
-      {textOfReceiveMessages}
-      <TextInput
-        value={messageToSend}
-        onChangeText={(text) => setMessageToSend(text)}
-        placeholder="Enter chat message.."
-        onSubmitEditing={sendMessage}
-      />
-    </View>
+    <GiftedChat
+      messages={receiveMessages}
+      // onSend={messages => this.onSend(messages)}
+      user={{
+        _id: 1,
+      }}
+    />
   );
 }
 
