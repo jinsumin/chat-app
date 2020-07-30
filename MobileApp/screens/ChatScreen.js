@@ -11,15 +11,18 @@ ChatScreen.navigationOptions = (screenProps) => ({
 export default function ChatScreen({ navigation }) {
   const dispatch = useDispatch();
   const selfUser = useSelector((state) => state.selfUser);
+  const conversations = userSelector(state => state.conversations);
+  const userId = navigation.getParam("userId");
+  const messages = conversations[userId].messages;
   return (
     <View style={{ flex: 1 }}>
       <GiftedChat
         renderUsernameOnMessage
-        messages={[]}
+        messages={messages}
         onSend={(messages) =>
           dispatch({
-            type: "server/private-message",
-            data: { text: messages[0].text, to: navigation.getParam("userId") },
+            type: "private-message",
+            data: { message: messages[0], conversationId: userId },
           })
         }
         user={{
