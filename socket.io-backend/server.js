@@ -10,14 +10,21 @@ function createUserAvatarUrl() {
   return `https://placeimg.com/${rand1}/${rand2}/any`;
 }
 
-io.on("connection", socket => {
+io.on("connection", (socket) => {
   console.log("a user connected!");
   console.log(socket.id);
   users[socket.id] = { userId: currentUserId++ };
-  socket.on("join", username => {
+  socket.on("join", (username) => {
     users[socket.id].username = username;
     users[socket.id].avatar = createUserAvatarUrl();
     messageHandler.handleMessage(socket, users);
+  });
+  socket.on("action", (action) => {
+    switch (action.type) {
+      case "server/hello":
+        console.log("got hello event", action.data);
+        socket.emit("action", { type: "message", data: "good day!" });
+    }
   });
 });
 
