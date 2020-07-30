@@ -36,8 +36,25 @@ io.on("connection", (socket) => {
         });
         socket.emit("action", { type: "self_user", data: users[socket.id] });
         break;
-      case "server/private-message":
-        console.log("got a private message", action.data);
+      case "server/private_message":
+        const conversationId = action.data.conversationId;
+        const from = users[socket.id].userId;
+        const userValues = Object.values(users);
+        const socketIds = Object.values(users);
+        for (let i = 0; i < userValues.length; i++) {
+          if (userValues[i].userId === conversationId) {
+            const socketId = socketIds[i];
+            io.sockets.sockets[socketId].emit("action", {
+              type: "private_message",
+              data: {
+                ...action.data,
+                conversationId: from,
+              },
+            });
+            break;
+          }
+        }
+        break;
     }
   });
 });
