@@ -10,7 +10,7 @@ export default function HomeScreen() {
   const socket = useRef(null);
 
   useEffect(() => {
-    socket.current = io("http://192.168.0.6:3001");
+    socket.current = io("http://192.168.10.194:3001");
     socket.current.on("message", (message) => {
       setReceiveMessages((prevState) => GiftedChat.append(prevState, message));
     });
@@ -31,6 +31,7 @@ export default function HomeScreen() {
     <View style={{ flex: 1 }}>
       {hasJoined ? (
         <GiftedChat
+          renderUsernameOnMessage
           messages={receiveMessages}
           onSend={(messages) => onSend(messages)}
           user={{
