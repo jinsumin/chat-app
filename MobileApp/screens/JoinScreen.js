@@ -6,10 +6,11 @@ import {
   Button,
   KeyboardAvoidingView,
   Platform,
-  ImagePropTypes,
 } from "react-native";
+import { useDispatch } from "react-redux";
 
-export default function JoinScreen({joinChat}) {
+export default function JoinScreen({ joinChat }) {
+  const dispatch = useDispatch();
   const [username, setUsername] = useState("");
 
   return (
@@ -30,7 +31,7 @@ export default function JoinScreen({joinChat}) {
         source={require("../assets/grouping-logo.png")}
       />
       <TextInput
-        onChangeText={text => setUsername(text)}
+        onChangeText={(text) => setUsername(text)}
         value={username}
         style={{
           fontSize: 40,
@@ -39,7 +40,11 @@ export default function JoinScreen({joinChat}) {
         }}
         placeholder="Enter username"
       />
-      <Button title="Join Chat" fontSize="50" onPress={() => joinChat(username)}/>
+      <Button
+        title="Join Chat"
+        fontSize="50"
+        onPress={() => dispatch({type: "server/join", data: username})}
+      />
       {Platform.OS === "ios" && <KeyboardAvoidingView behavior="padding" />}
     </View>
   );

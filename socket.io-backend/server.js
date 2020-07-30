@@ -24,6 +24,12 @@ io.on("connection", (socket) => {
       case "server/hello":
         console.log("got hello event", action.data);
         socket.emit("action", { type: "message", data: "good day!" });
+        break;
+      case "server/join":
+        console.log("got join event", action.data);
+        users[socket.id].username = action.data;
+        users[socket.id].avatar = createUserAvatarUrl();
+        break;
     }
   });
 });

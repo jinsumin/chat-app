@@ -3,6 +3,7 @@ import AppContainer from "./AppContainer";
 import { createStore, applyMiddleware } from "redux";
 import createSocketIoMiddleware from "redux-socket.io";
 import io from "socket.io-client";
+import { Provider } from "react-redux";
 
 const socket = io("http://192.168.10.194:3001");
 const socketIoMiddleware = createSocketIoMiddleware(socket, "server/");
@@ -25,5 +26,9 @@ store.subscribe(() => {
 store.dispatch({ type: "server/hello", data: "hello!" });
 
 export default function App() {
-  return <AppContainer />;
+  return (
+    <Provider store={store}>
+      <AppContainer />
+    </Provider>
+  );
 }
