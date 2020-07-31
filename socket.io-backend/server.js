@@ -1,6 +1,5 @@
 const io = require("socket.io")();
-const uuid_v1 = require("uuid/v1");
-const messageHandler = require("./handlers/message.handler");
+const uuid = require("react-native-uuid");
 
 const users = {};
 
@@ -19,7 +18,7 @@ function createUsersOnline() {
 io.on("connection", (socket) => {
   console.log("a user connected!");
   console.log(socket.id);
-  users[socket.id] = { userId: uuid_v1() };
+  users[socket.id] = { userId: uuid.v1() };
   socket.on("disconnect", () => {
     delete users[socket.id];
     io.emit("action", { type: "users_online", data: createUsersOnline() });
@@ -40,7 +39,7 @@ io.on("connection", (socket) => {
         const conversationId = action.data.conversationId;
         const from = users[socket.id].userId;
         const userValues = Object.values(users);
-        const socketIds = Object.values(users);
+        const socketIds = Object.keys(users);
         for (let i = 0; i < userValues.length; i++) {
           if (userValues[i].userId === conversationId) {
             const socketId = socketIds[i];

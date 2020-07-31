@@ -11,7 +11,7 @@ ChatScreen.navigationOptions = (screenProps) => ({
 export default function ChatScreen({ navigation }) {
   const dispatch = useDispatch();
   const selfUser = useSelector((state) => state.selfUser);
-  const conversations = userSelector(state => state.conversations);
+  const conversations = useSelector(state => state.conversations);
   const userId = navigation.getParam("userId");
   const messages = conversations[userId].messages;
   return (

@@ -16,7 +16,7 @@ function reducer(state = { conversations: {} }, action) {
       for (let i = 0; i < usersOnline.length; i++) {
         const userId = usersOnline[i].userId;
         if (conversations[userId] === undefined) {
-          conversations[userID] = {
+          conversations[userId] = {
             messages: [],
             username: usersOnline[i].username,
           };
